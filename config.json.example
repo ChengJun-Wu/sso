@@ -1,0 +1,15 @@
+{
+  "database":{
+    "ip": "IP",
+    "port": "端口号",
+    "name": "数据库名称",
+    "username": "用户名",
+    "password": "密码"
+  },
+  "redis": {
+    "ip": "IP",
+    "port": "端口号",
+    "password": "密码",
+    "db": 0
+  }
+}
