@@ -20,7 +20,27 @@ type LoginFrom struct {
 	Password string `form:"password" json:"password" xml:"password"  binding:"required"`
 }
 
-func (c *Login) Store(ctx *gin.Context)  {
+func (c *Login) Index(ctx *gin.Context) {
+	session := sessions.Default(ctx)
+	uid := session.Get("uid")
+	if uid == nil {
+		ctx.JSON(http.StatusOK, helpers.ResponseNeedLogin())
+		return
+	}
+	user := models.User{
+		ID: uid.(uint),
+	}
+	db := statics.GetDb()
+	result := db.Take(&user)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		ctx.JSON(http.StatusOK, helpers.ResponseNeedLogin())
+		return
+	}
+	user.Password = ""
+	ctx.JSON(http.StatusOK, helpers.ResponseSuccess(user))
+}
+
+func (c *Login) Store(ctx *gin.Context) {
 	var form LoginFrom
 	if err := ctx.ShouldBind(&form); err != nil {
 		ctx.JSON(http.StatusOK, helpers.ResponseFail(err.Error()))
@@ -43,5 +63,6 @@ func (c *Login) Store(ctx *gin.Context)  {
 	}
 	session := sessions.Default(ctx)
 	session.Set("uid", user.ID)
+	session.Save()
 	ctx.JSON(http.StatusOK, helpers.ResponseSuccess())
 }

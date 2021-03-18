@@ -25,7 +25,10 @@ func init()  {
 	sqlDb.SetMaxIdleConns(10)
 	sqlDb.SetMaxOpenConns(100)
 
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(
+		&models.User{},
+		&models.Route{},
+	)
 }
 
 func GetDb() *gorm.DB {

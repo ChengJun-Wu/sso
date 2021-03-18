@@ -9,6 +9,7 @@ import (
 var commandMap = map[string]commands.Command {
 	"help": &commands.Help{},
 	"run": &commands.Run{},
+	"route": &commands.Route{},
 }
 
 func main()  {
