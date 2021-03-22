@@ -66,3 +66,10 @@ func (c *Login) Store(ctx *gin.Context) {
 	session.Save()
 	ctx.JSON(http.StatusOK, helpers.ResponseSuccess())
 }
+
+func (c *Login) Destroy(ctx *gin.Context) {
+	session := sessions.Default(ctx)
+	session.Delete("uid")
+	session.Save()
+	ctx.JSON(http.StatusOK, helpers.ResponseSuccess())
+}

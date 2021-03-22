@@ -19,6 +19,9 @@ type HandlerInterface interface {
 type Handler struct {
 }
 
+type Form struct {
+}
+
 func (h *Handler) Index(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, helpers.ResponseSuccess())
 }
@@ -74,4 +77,36 @@ func (h *Handler) DecrFailedFrequency(ctx *gin.Context) {
 	}
 	session.Set(key, count)
 	session.Save()
+}
+
+func (h *Handler) Page(ctx *gin.Context) int {
+	page := ctx.DefaultQuery("page", "1")
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+	}
+	return pageInt
+}
+
+func (h *Handler) Limit(ctx *gin.Context) int {
+	limit := ctx.DefaultQuery("limit", "10")
+	limitInt, err := strconv.Atoi(limit)
+	if err != nil {
+		limitInt = 10
+	}
+	return limitInt
+}
+
+func (h *Handler) Offset(ctx *gin.Context) int {
+	return (h.Page(ctx) - 1) * h.Limit(ctx)
+}
+
+func (h *Handler) StringToInt(s string) int {
+	i, _ := strconv.Atoi(s)
+	return i
+}
+
+func (h *Handler) StringToUInt(s string) uint {
+	i, _ := strconv.Atoi(s)
+	return uint(i)
 }

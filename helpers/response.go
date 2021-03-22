@@ -48,6 +48,12 @@ func ResponseSuccess(args ...interface{}) map[string]interface{} {
 	return resp
 }
 
+func ResponseDivideData(data interface{}, total int64) map[string]interface{} {
+	resp := ResponseSuccess(data)
+	resp["total"] = total
+	return resp
+}
+
 func ResponseFail(args ...interface{}) map[string]interface{} {
 
 	var (

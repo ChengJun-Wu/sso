@@ -21,6 +21,7 @@ func (command *Route) Run()  {
 		dbRoute = models.Route{
 			Path: route.Path,
 			Method: route.Method,
+			AppId: 1,
 		}
 		db.FirstOrCreate(&dbRoute, models.Route{Path: route.Path, Method: route.Method})
 		enableIds = append(enableIds, dbRoute.ID)

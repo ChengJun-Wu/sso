@@ -23,11 +23,11 @@ func (command *Run) Run()  {
 
 	routeManager := router.RouteManager{}
 	routeManager.Init(r)
-	checkInitAdmin()
+	checkInit()
 	r.Run(":19284") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
-func checkInitAdmin()  {
+func checkInit()  {
 	db := statics.GetDb()
 	user := models.User {
 		Name: "admin",
@@ -40,5 +40,15 @@ func checkInitAdmin()  {
 			Password: helpers.PasswordHash("admin"),
 		}
 		db.Create(&user)
+	}
+	var count int64
+	db.Model(models.App{}).Count(&count)
+	if count == 0 {
+		app := models.App{
+			Name: "sso",
+			AppKey: helpers.RandomString(16),
+			AppSecret: helpers.RandomString(16),
+		}
+		db.Create(&app)
 	}
 }

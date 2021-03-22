@@ -28,6 +28,7 @@ func init()  {
 	db.AutoMigrate(
 		&models.User{},
 		&models.Route{},
+		&models.App{},
 	)
 }
 
