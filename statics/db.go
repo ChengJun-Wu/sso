@@ -25,11 +25,16 @@ func init()  {
 	sqlDb.SetMaxIdleConns(10)
 	sqlDb.SetMaxOpenConns(100)
 
-	db.AutoMigrate(
+	err = db.AutoMigrate(
 		&models.User{},
 		&models.Route{},
 		&models.App{},
+		&models.Auth{},
+		&models.AuthRoute{},
 	)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func GetDb() *gorm.DB {

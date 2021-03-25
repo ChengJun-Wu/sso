@@ -9,8 +9,9 @@ import (
 type RouteManager struct {
 	login handlers.Login
 	captcha handlers.Captcha
-	test handlers.Test
 	route handlers.Route
+	auth handlers.Auth
+	authRoute handlers.AuthRoute
 	app handlers.App
 }
 
@@ -32,7 +33,19 @@ func (m *RouteManager) Init(g *gin.Engine) {
 		backend.GET("route/:id", m.route.Show)
 		backend.PUT("route/:id", m.route.Update)
 
+		backend.GET("auth", m.auth.Index)
+		backend.GET("auth/:id", m.auth.Show)
+		backend.PUT("auth/:id", m.auth.Update)
+		backend.POST("auth", m.auth.Store)
+
+		backend.GET("auth/:id/route", m.authRoute.Index)
+		//backend.GET("auth/:aid/route/:rid", m.authRoute.Show)
+		backend.PUT("auth/:id/route/:rid", m.authRoute.Update)
+		//backend.POST("auth/:aid/route", m.authRoute.Store)
+		backend.DELETE("auth/:id/route/:rid", m.authRoute.Destroy)
+
 		backend.GET("app", m.app.Index)
+
 	}
 
 }

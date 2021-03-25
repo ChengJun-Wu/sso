@@ -23,7 +23,7 @@ func (command *Run) Run()  {
 
 	routeManager := router.RouteManager{}
 	routeManager.Init(r)
-	checkInit()
+	go checkInit()
 	r.Run(":19284") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 

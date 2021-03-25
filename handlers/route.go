@@ -38,7 +38,7 @@ func (h *Route) Index(ctx *gin.Context) {
 		query.Where("path like ?", "%" + form.Path + "%")
 	}
 	query.Count(&count)
-	query.Offset(h.Offset(ctx)).Limit(h.Limit(ctx)).Find(&routes)
+	query.Offset(h.Offset(ctx)).Limit(h.Limit(ctx)).Order("id asc").Find(&routes)
 	ctx.JSON(http.StatusOK, helpers.ResponseDivideData(routes, count))
 }
 
