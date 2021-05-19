@@ -48,11 +48,9 @@ func (h *Auth) Index(ctx *gin.Context) {
 
 func (h *Auth) Show(ctx *gin.Context) {
 	id := ctx.Param("id")
-	auth := models.Auth{
-		ID: h.StringToUInt(id),
-	}
+	var auth models.Auth
 	db := statics.GetDb()
-	result := db.Take(&auth)
+	result := db.Where("id", h.StringToUInt(id)).Take(&auth)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		ctx.JSON(http.StatusOK, helpers.ResponseSuccess())
 		return
@@ -68,11 +66,9 @@ type AuthUpdateForm struct {
 
 func (h *Auth) Update(ctx *gin.Context) {
 	id := ctx.Param("id")
-	auth := models.Auth{
-		ID: h.StringToUInt(id),
-	}
+	var auth models.Auth
 	db := statics.GetDb()
-	result := db.Take(&auth)
+	result := db.Where("id", h.StringToUInt(id)).Take(&auth)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		ctx.JSON(http.StatusOK, helpers.ResponseFail("data not found"))
 		return

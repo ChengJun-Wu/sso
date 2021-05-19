@@ -12,6 +12,8 @@ type RouteManager struct {
 	route handlers.Route
 	auth handlers.Auth
 	authRoute handlers.AuthRoute
+	user handlers.User
+	userAuth handlers.UserAuth
 	app handlers.App
 }
 
@@ -43,6 +45,16 @@ func (m *RouteManager) Init(g *gin.Engine) {
 		backend.PUT("auth/:id/route/:rid", m.authRoute.Update)
 		//backend.POST("auth/:aid/route", m.authRoute.Store)
 		backend.DELETE("auth/:id/route/:rid", m.authRoute.Destroy)
+
+		backend.GET("user", m.user.Index)
+		backend.GET("user/:id", m.user.Show)
+		backend.PUT("user/:id", m.user.Update)
+		backend.POST("user", m.user.Store)
+		backend.GET("user/:id/auth", m.userAuth.Index)
+		//backend.GET("auth/:aid/route/:rid", m.authRoute.Show)
+		backend.PUT("user/:id/auth/:aid", m.userAuth.Update)
+		//backend.POST("auth/:aid/route", m.authRoute.Store)
+		backend.DELETE("user/:id/auth/:aid", m.userAuth.Destroy)
 
 		backend.GET("app", m.app.Index)
 

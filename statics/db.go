@@ -5,7 +5,6 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
-	"sso/models"
 )
 
 var db *gorm.DB
@@ -25,18 +24,19 @@ func init()  {
 	sqlDb.SetMaxIdleConns(10)
 	sqlDb.SetMaxOpenConns(100)
 
-	err = db.AutoMigrate(
-		&models.User{},
-		&models.Route{},
-		&models.App{},
-		&models.Auth{},
-		&models.AuthRoute{},
-	)
-	if err != nil {
-		fmt.Println(err)
-	}
+	//err = db.AutoMigrate(
+	//	&models.Route{},
+	//	&models.App{},
+	//	&models.Auth{},
+	//	&models.AuthRoute{},
+	//	&models.User{},
+	//	&models.UserAuth{},
+	//)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }
 
 func GetDb() *gorm.DB {
-	return db
+	return db.Debug()
 }

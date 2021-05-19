@@ -29,10 +29,8 @@ func (command *Run) Run()  {
 
 func checkInit()  {
 	db := statics.GetDb()
-	user := models.User {
-		Name: "admin",
-	}
-	result := db.Take(&user)
+	var user models.User
+	result := db.Where("name", "admin").Take(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		user = models.User{
 			Name: "admin",

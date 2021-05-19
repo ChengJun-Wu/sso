@@ -44,11 +44,9 @@ func (h *Route) Index(ctx *gin.Context) {
 
 func (h *Route) Show(ctx *gin.Context) {
 	id := ctx.Param("id")
-	route := models.Route{
-		ID: h.StringToUInt(id),
-	}
+	var route models.Route
 	db := statics.GetDb()
-	result := db.Take(&route)
+	result := db.Where("id", h.StringToUInt(id)).Take(&route)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		ctx.JSON(http.StatusOK, helpers.ResponseSuccess())
 		return
@@ -62,11 +60,9 @@ type RouteUpdateForm struct {
 
 func (h *Route) Update(ctx *gin.Context) {
 	id := ctx.Param("id")
-	route := models.Route{
-		ID: h.StringToUInt(id),
-	}
+	var route models.Route
 	db := statics.GetDb()
-	result := db.Take(&route)
+	result := db.Where("id", h.StringToUInt(id)).Take(&route)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		ctx.JSON(http.StatusOK, helpers.ResponseFail("data not found"))
 		return

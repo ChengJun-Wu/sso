@@ -15,11 +15,6 @@ type Login struct {
 	Handler
 }
 
-type LoginFrom struct {
-	Username string `form:"username" json:"username" xml:"username"  binding:"required"`
-	Password string `form:"password" json:"password" xml:"password"  binding:"required"`
-}
-
 func (c *Login) Index(ctx *gin.Context) {
 	session := sessions.Default(ctx)
 	uid := session.Get("uid")
@@ -27,17 +22,20 @@ func (c *Login) Index(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, helpers.ResponseNeedLogin())
 		return
 	}
-	user := models.User{
-		ID: uid.(uint),
-	}
+	var user models.User
 	db := statics.GetDb()
-	result := db.Take(&user)
+	result := db.Where("id", uid.(uint)).Take(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		ctx.JSON(http.StatusOK, helpers.ResponseNeedLogin())
 		return
 	}
 	user.Password = ""
 	ctx.JSON(http.StatusOK, helpers.ResponseSuccess(user))
+}
+
+type LoginFrom struct {
+	Username string `form:"username" json:"username" xml:"username"  binding:"required"`
+	Password string `form:"password" json:"password" xml:"password"  binding:"required"`
 }
 
 func (c *Login) Store(ctx *gin.Context) {
@@ -47,10 +45,8 @@ func (c *Login) Store(ctx *gin.Context) {
 		return
 	}
 	db := statics.GetDb()
-	user := models.User{
-		Username: form.Username,
-	}
-	result := db.Take(&user)
+	var user models.User
+	result := db.Where("username", form.Username).Take(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.IncrFailedFrequency(ctx)
 		ctx.JSON(http.StatusOK, helpers.ResponseFail("账号或密码不正确"))

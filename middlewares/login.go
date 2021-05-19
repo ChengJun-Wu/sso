@@ -20,11 +20,9 @@ func LoginMiddleware() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		user := models.User{
-			ID: uid.(uint),
-		}
+		var user models.User
 		db := statics.GetDb()
-		result := db.Take(&user)
+		result := db.Where("id", uid.(uint)).Take(&user)
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			ctx.JSON(http.StatusOK, helpers.ResponseNeedLogin())
 			ctx.Abort()
